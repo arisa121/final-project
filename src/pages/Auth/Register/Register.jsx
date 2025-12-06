@@ -5,6 +5,7 @@ import { MdOutlineMail } from "react-icons/md";
 import { TbLockPassword } from "react-icons/tb";
 import { useForm } from "react-hook-form";
 import useAuth from "../../../hook/useAuth";
+import SocialLogin from "../SocialLogin/SocialLogin";
 
 
 const Register = () => {
@@ -60,12 +61,6 @@ const Register = () => {
               {...register("firstName")}
               className="input input-bordered w-full"
             />
-            <input
-              type="text"
-              placeholder="Last Name"
-              {...register("lastName")}
-              className="input input-bordered w-full"
-            />
           </div>
 
           <label className="input input-bordered w-full flex items-center gap-2">
@@ -84,6 +79,12 @@ const Register = () => {
               </p>
             )}
           </label>
+          <input
+            type="url"
+            placeholder="Upload Your Photo"
+            {...register("photo")}
+            className="input input-bordered w-full"
+          />
 
           <label className="input input-bordered w-full flex items-center gap-2">
             <span className="text-gray-500">
@@ -97,11 +98,6 @@ const Register = () => {
             />
           </label>
 
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input type="checkbox" className="checkbox" />
-            <span>Sign up for newsletter</span>
-          </label>
-
           <button className="btn btn-neutral w-full text-white">
             Create an account
           </button>
@@ -109,7 +105,8 @@ const Register = () => {
 
         <p className="text-center text-gray-500 my-4">or sign in with</p>
 
-       
+        {/* Social log in */}
+        <SocialLogin></SocialLogin>
 
         <p className="text-center text-sm mt-6 text-gray-600">
           By creating an account, you agree to our{" "}

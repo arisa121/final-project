@@ -6,6 +6,7 @@ import { MdOutlineMail } from "react-icons/md";
 import { TbLockPassword } from "react-icons/tb";
 import { useForm } from "react-hook-form";
 import useAuth from "../../../hook/useAuth";
+import SocialLogin from "../SocialLogin/SocialLogin";
 
 const Login = () => {
   
@@ -95,11 +96,6 @@ const Login = () => {
           </label>
 
           <div className="flex justify-between items-center">
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" className="checkbox" />
-              <span>Remember me</span>
-            </label>
-
             <a className="link text-sm">Forgot password?</a>
           </div>
 
@@ -109,17 +105,7 @@ const Login = () => {
         <p className="text-center text-gray-500 my-4">or sign in with</p>
 
         {/* Social */}
-        <div className="grid grid-cols-3 gap-4">
-          <button className="btn">
-            <FcGoogle className="text-xl" />
-          </button>
-          <button className="btn">
-            <FaApple className="text-xl" />
-          </button>
-          <button className="btn">
-            <FaGithub className="text-xl" />
-          </button>
-        </div>
+        <SocialLogin></SocialLogin>
 
         <p className="text-center text-sm mt-6 text-gray-600">
           Don’t have an account?{" "}
