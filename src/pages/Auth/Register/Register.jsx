@@ -1,120 +1,148 @@
-
-
-import { Link } from "react-router";
-import { MdOutlineMail } from "react-icons/md";
-import { TbLockPassword } from "react-icons/tb";
-import { useForm } from "react-hook-form";
+import { useForm} from "react-hook-form";
+import { Link, useNavigate } from "react-router";
 import useAuth from "../../../hook/useAuth";
-import SocialLogin from "../SocialLogin/SocialLogin";
+import Swal from "sweetalert2";
 
+const SignUp = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-const Register = () => {
-  const {register,formState:{errors},handleSubmit } = useForm();
-
-  const { registerUser } = useAuth();
+  
+  const {registerUser} = useAuth();
+  const navigate = useNavigate();
   const handleRegisterUser = (data) => {
-    console.log(data);
+    console.log(data)
     registerUser(data.email, data.password)
-      .then(result => {
-      console.log(result.user);
-      })
-      .catch(error => {
-      console.log(error);
+      .then((result) => {
+          console.log(result.user);
+          Swal.fire({
+            title: "Success!",
+            text: "You have logged in successfully.",
+            icon: "success"
+           
+          });
+        navigate("/")
+        })
+        .catch(error => {
+          console.log(error);
+          Swal.fire({
+            title: "Error!",
+            text: error.message,
+            icon: "error",
+            confirmButtonText: "Ok",
+          });
     })
-    
-  }
+        
+  };
+
   return (
-    <div
-      className="min-h-screen flex items-center justify-center bg-cover bg-center px-4"
-      style={{
-        backgroundImage:
-          "url('https://images.unsplash.com/photo-1557682250-33bd709cbe85?auto=format&fit=crop&w=1740&q=80')",
-      }}
-    >
-      <div className="bg-white/80 backdrop-blur-xl shadow-xl rounded-2xl w-full max-w-xl p-8">
-        {/* Tabs */}
-        <div className="flex justify-center mb-6">
-          <Link
-            to="/register"
-            className="px-6 py-2 rounded-l-xl bg-black text-white"
-          >
-            Sign up
-          </Link>
-          <Link
-            to="/login"
-            className="px-6 py-2 rounded-r-xl bg-gray-200 hover:bg-gray-300"
-          >
-            Sign in
-          </Link>
-        </div>
+    <div className="min-h-screen bg-gray-100 flex items-center justify-between px-16">
+      {/* LEFT FORM */}
+      <div className="w-1/2 pr-10">
+        <h1 className="text-4xl font-bold mb-3">Sign Up</h1>
+        <p className="text-gray-600 mb-8">
+          Enter your personal details and start journey with us.
+        </p>
 
-        <h2 className="text-2xl font-bold text-center mb-6">
-          Create an account
-        </h2>
-
-        {/* Form */}
-        <form onSubmit={handleSubmit(handleRegisterUser)} className="space-y-4">
-          <div className="flex gap-4">
+        <form onSubmit={handleSubmit(handleRegisterUser)} className="space-y-5">
+          {/* Full Name */}
+          <div>
             <input
               type="text"
-              placeholder="First Name"
-              {...register("firstName")}
-              className="input input-bordered w-full"
+              placeholder="Full Name"
+              {...register("firstName", { required: "Full Name is required" })}
+              className="w-full p-3 rounded-lg border border-gray-300 focus:border-teal-500 focus:ring-0"
             />
+            {errors.firstName && (
+              <p className="text-red-500 text-sm">{errors.firstName.message}</p>
+            )}
           </div>
 
-          <label className="input input-bordered w-full flex items-center gap-2">
-            <span className="text-gray-500">
-              <MdOutlineMail />
-            </span>
+          {/* Email */}
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <input
+                type="email"
+                placeholder="Email"
+                {...register("email", {
+                  required: "Email is required",
+                  pattern: { value: /^\S+@\S+$/i, message: "Invalid email" },
+                })}
+                className="w-full p-3 rounded-lg border border-gray-300 focus:border-teal-500 focus:ring-0"
+              />
+              {errors.email && (
+                <p className="text-red-500 text-sm">{errors.email.message}</p>
+              )}
+            </div>
+          </div>
+          {/*  Photo URL */}
+          <div>
             <input
-              type="email"
-              className="grow"
-              placeholder="Your email"
-              {...register("email", { required: true })}
+              type="text"
+              placeholder="Photo URL"
+              {...register("photo", {
+                required: "Photo URL is required",
+              })}
+              className="w-full p-3 rounded-lg border border-gray-300 focus:border-teal-500 focus:ring-0"
             />
-            {errors.email?.type === "required" && (
-              <p className="text-red-500" role="alert">
-                Email is required
-              </p>
+            {errors.photo && (
+              <p className="text-red-500 text-sm">{errors.photo.message}</p>
             )}
-          </label>
-          <input
-            type="url"
-            placeholder="Upload Your Photo"
-            {...register("photo")}
-            className="input input-bordered w-full"
-          />
+          </div>
 
-          <label className="input input-bordered w-full flex items-center gap-2">
-            <span className="text-gray-500">
-              <TbLockPassword />
-            </span>
-            <input
-              type="password"
-              className="grow"
-              placeholder="Password"
-              {...register("password", { required: true })}
-            />
-          </label>
+          {/* Passwor*/}
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <input
+                type="password"
+                placeholder="Password"
+                {...register("password", {
+                  required: "Password is required",
+                  minLength: { value: 6, message: "Minimum 6 characters" },
+                })}
+                className="w-full p-3 rounded-lg border border-gray-300 focus:border-teal-500 focus:ring-0"
+              />
+              {errors.password && (
+                <p className="text-red-500 text-sm">
+                  {errors.password.message}
+                </p>
+              )}
+            </div>
+          </div>
 
-          <button className="btn btn-neutral w-full text-white">
-            Create an account
+          {/* Button */}
+          <button
+            type="submit"
+            className="bg-teal-500 text-white px-6 py-3 rounded-lg hover:bg-teal-600 transition"
+          >
+            Sign Up
           </button>
         </form>
 
-        <p className="text-center text-gray-500 my-4">or sign in with</p>
-
-        {/* Social log in */}
-        <SocialLogin></SocialLogin>
-
-        <p className="text-center text-sm mt-6 text-gray-600">
-          By creating an account, you agree to our{" "}
-          <a className="link">Terms & Service</a>
+        <p className="mt-5 text-gray-700">
+          Already have an account?{" "}
+          <Link
+            to="/login"
+            className="text-teal-500 font-semibold cursor-pointer"
+          >
+            Sign In
+          </Link>
         </p>
+      </div>
+
+      {/* RIGHT ILLUSTRATION */}
+      <div className="w-1/2 flex justify-center">
+        <img
+          src="/signup-illustration.png"
+          className="w-4/5"
+          alt="Signup Illustration"
+        />
       </div>
     </div>
   );
 };
 
-export default Register;
+export default SignUp;

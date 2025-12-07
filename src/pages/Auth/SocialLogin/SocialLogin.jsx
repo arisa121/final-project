@@ -2,15 +2,34 @@ import React from 'react';
 import { FcGoogle } from "react-icons/fc";
 import { FaApple, FaGithub } from "react-icons/fa";
 import useAuth from '../../../hook/useAuth';
+import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router';
 
 const SocialLogin = () => {
- const {signInGoogle} = useAuth()
+  const { signInGoogle } = useAuth();
+  const navigate = useNavigate();
   const handleGoogleSignIn = () => {
     signInGoogle().then(result => {
       console.log(result.user);
+      Swal.fire({
+                title: "Success!",
+                text: "You have logged in successfully.",
+                icon: "success",
+                
+      });
+      navigate("/")
+      
     })
       .catch(error => {
-      console.log(error);
+        console.log(error);
+        Swal.fire({
+                    title: "Error!",
+                    text: error.message,
+                    icon: "error",
+                    confirmButtonText: "Ok",
+        });
+        
+        
     })
     
   }

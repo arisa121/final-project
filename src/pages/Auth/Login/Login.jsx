@@ -1,118 +1,120 @@
 
 import { FcGoogle } from "react-icons/fc";
 import { FaApple, FaGithub } from "react-icons/fa";
-import { Link } from "react-router";
-import { MdOutlineMail } from "react-icons/md";
-import { TbLockPassword } from "react-icons/tb";
+import { Link, Navigate, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import useAuth from "../../../hook/useAuth";
 import SocialLogin from "../SocialLogin/SocialLogin";
+import Swal from "sweetalert2";
 
 const Login = () => {
   
   const { signInUser } = useAuth();
   const { register, formState: { errors }, handleSubmit } = useForm();
-  
+  const navigate = useNavigate()
 
   const handleLogIn = (data) => {
     console.log(data)
     signInUser(data.email, data.password)
       .then(result => {
-      console.log(result.user);
+        console.log(result.user);
+        Swal.fire({
+          title: "Success!",
+          text: "You have logged in successfully.",
+          icon: "success"
+        });
+        navigate("/");
       })
-      .catch(error => {
+    .catch(error => {
       console.log(error);
+      Swal.fire({
+        title: "Error!",
+        text: error.message,
+        icon: "error",
+        confirmButtonText: "Ok",
+      });
     })
     
   }
   return (
-    <div
-      className="min-h-screen flex items-center justify-center bg-cover bg-center px-4"
-      style={{
-        backgroundImage:
-          "url('https://images.unsplash.com/photo-1557682250-33bd709cbe85?auto=format&fit=crop&w=1740&q=80')",
-      }}
-    >
-      <div className="bg-white/80 backdrop-blur-xl shadow-xl rounded-2xl w-full max-w-md p-8">
-        {/* Tabs */}
-        <div className="flex justify-center mb-6">
-          <Link
-            to="/register"
-            className="px-6 py-2 rounded-l-xl bg-gray-200 hover:bg-gray-300"
-          >
-            Sign up
-          </Link>
-          <Link
-            to="/login"
-            className="px-6 py-2 rounded-r-xl bg-black text-white"
-          >
-            Sign in
-          </Link>
-        </div>
+    <div className="min-h-screen bg-gray-100 flex items-center justify-between px-16">
+      {/* LEFT FORM */}
+      <div className="w-1/2 pr-10">
+        <h1 className="text-4xl font-bold mb-3">Log In</h1>
+        <p className="text-gray-600 mb-8">
+          Enter your personal details and start journey with us.
+        </p>
 
-        <h2 className="text-2xl font-bold text-center mb-6">Welcome back</h2>
+        <form onSubmit={handleSubmit(handleLogIn)} className="space-y-5">
 
-        {/* Form */}
-        <form onSubmit={handleSubmit(handleLogIn)} className="space-y-4">
-          <label className="input input-bordered w-full flex items-center gap-2">
-            <span className="text-gray-500">
-              <MdOutlineMail />
-            </span>
-            <input
-              type="email"
-              {...register("email", { required: true })}
-              className="grow"
-              placeholder="Email"
-            />
-            {errors.email?.type === "required" && (
-              <p className="text-red-500" role="alert">
-                Email is required
-              </p>
-            )}
-          </label>
-
-          <label className="input input-bordered w-full flex items-center gap-2">
-            <span className="text-gray-500">
-              <TbLockPassword />
-            </span>
-            <input
-              type="password"
-              {...register("password", {
-                required: true,
-                pattern: {
-                  value: /^(?=.*[A-Z])(?=.*[a-z])(?=.*[^A-Za-z0-9]).{6,}$/,
-                  message:
-                    "Password must contain uppercase, lowercase ,a symbol & min 6 charecters",
-                },
-              })}
-              className="grow flex flex-col"
-              placeholder="Password"
-            />
-            {errors.password && (
-              <div className="mt-1 bg-red-100 border border-red-400 text-red-700 px-3 py-1 rounded">
-                {errors.password.message}
-              </div>
-            )}
-          </label>
-
-          <div className="flex justify-between items-center">
-            <a className="link text-sm">Forgot password?</a>
+          {/* Email */}
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <input
+                type="email"
+                placeholder="Email"
+                {...register("email", {
+                  required: "Email is required",
+                  pattern: { value: /^\S+@\S+$/i, message: "Invalid email" },
+                })}
+                className="w-full p-3 rounded-lg border border-gray-300 focus:border-teal-500 focus:ring-0"
+              />
+              {errors.email && (
+                <p className="text-red-500 text-sm">{errors.email.message}</p>
+              )}
+            </div>
+          </div>
+          {/* Passwor*/}
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <input
+                type="password"
+                placeholder="Password"
+                {...register("password", {
+                  required: "Password is required",
+                  minLength: { value: 6, message: "Minimum 6 characters" },
+                })}
+                className="w-full p-3 rounded-lg border border-gray-300 focus:border-teal-500 focus:ring-0"
+              />
+              {errors.password && (
+                <p className="text-red-500 text-sm">
+                  {errors.password.message}
+                </p>
+              )}
+            </div>
           </div>
 
-          <button className="btn btn-neutral w-full text-white">Sign in</button>
+          {/* Button */}
+          <button
+            type="submit"
+            className="bg-teal-500 text-white px-6 py-3 rounded-lg hover:bg-teal-600 transition"
+          >
+            Log In
+          </button>
         </form>
-
-        <p className="text-center text-gray-500 my-4">or sign in with</p>
-
-        {/* Social */}
+        <div className="divide-accent">
+          OR
+        </div>
         <SocialLogin></SocialLogin>
 
-        <p className="text-center text-sm mt-6 text-gray-600">
-          Don’t have an account?{" "}
-          <Link className="link" to="/register">
-            <span className="text-blue-600">Create Account</span>
+        <p className="mt-5 text-gray-700">
+          Already have an account?{" "}
+          <Link
+            to="/register"
+            className="text-teal-500 font-semibold cursor-pointer"
+          >
+            Sign In
           </Link>
         </p>
+      </div>
+
+      {/* RIGHT ILLUSTRATION */}
+      <div className="w-1/2 flex justify-center">
+        <img
+          src="/signup-illustration.png"
+          className="w-4/5"
+          alt="Signup Illustration"
+        />
       </div>
     </div>
   );
