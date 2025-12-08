@@ -11,10 +11,12 @@ import StaffDashboard from "../dashboards/staff/StaffDashboard";
 import AdminRoute from "./AdminRoute";
 import AdminDashboard from "../dashboards/admin/AdminDashboard";
 
+
 export const router = createBrowserRouter([
     // Public Routes
   {
-    path: '/',
+        path: '/',
+       
         Component: RootLayout,
         children: [
             {
