@@ -111,7 +111,7 @@ import axiosSecure from "../../api/axiosSecure";
 import Swal from "sweetalert2";
 
 const CitizenProfile = () => {
-  const qc = useQueryClient();
+  const queryClient = useQueryClient();
   const {
     data: user,
     isLoading,
@@ -130,7 +130,7 @@ const CitizenProfile = () => {
       return res.data;
     },
     onSuccess: () => {
-      qc.invalidateQueries(["auth-me"]);
+      queryClient.invalidateQueries(["auth-me"]);
       Swal.fire({
         icon: "success",
         title: "Updated!",
@@ -157,14 +157,23 @@ const CitizenProfile = () => {
       });
       return res.data;
     },
-    onSuccess: () => {
-      qc.invalidateQueries(["auth-me"]);
+    onSuccess: (data) => {
+      queryClient.invalidateQueries(["auth-me"]);
       Swal.fire({
         icon: "success",
         title: "Congratulations!",
-        text: "You are now a Premium member!",
-        timer: 3000,
-        showConfirmButton: false,
+        html: `
+        <div class="text-left">
+            <p class="mb-2">Your premium subscription is now active!</p>
+            <ul class="list-disc list-inside text-sm text-gray-600">
+              <li>Unlimited issue reports</li>
+              <li>Priority support</li>
+              <li>Exclusive features</li>
+            </ul>
+            <p class="mt-3 text-sm">Transaction ID: <strong>${data.payment.txnId}</strong></p>
+          </div>
+        `,
+        confirmButtonText: "Awesome!",
       });
     },
     onError: (error) => {
@@ -176,15 +185,6 @@ const CitizenProfile = () => {
       });
     },
   });
-
-  // Loading State
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <span className="loading loading-spinner loading-lg"></span>
-      </div>
-    );
-  }
 
   // Error State
   if (isError) {
@@ -237,6 +237,14 @@ const CitizenProfile = () => {
       }
     });
   };
+  // Loading State
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <span className="loading loading-spinner loading-lg"></span>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6">
@@ -245,7 +253,7 @@ const CitizenProfile = () => {
         {/* Profile Image */}
         <div className="flex justify-center mb-4">
           <img
-            src={user?.photoURL }
+            src={user?.photoURL}
             alt="avatar"
             className="w-24 h-24 rounded-full border-4 border-blue-500 object-cover"
             onError={(e) => {
@@ -361,32 +369,61 @@ const CitizenProfile = () => {
               Edit Profile
             </button>
 
-            {!user?.isPremium && (
-              <button
-                className="btn btn-warning w-full"
-                onClick={handleSubscribe}
-                disabled={subscribeMutation.isPending || user?.isBlocked}
-              >
-                {subscribeMutation.isPending ? (
-                  <>
-                    <span className="loading loading-spinner loading-sm"></span>
-                    Processing...
-                  </>
-                ) : (
-                  <>
+            {/* Premium Subscription Section (ADD THIS) */}
+            <div className="card bg-white shadow-lg">
+              <div className="card-body">
+                <h3 className="font-bold text-lg mb-4">Subscription</h3>
+
+                {user?.isPremium ? (
+                  <div className="alert alert-success">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5"
-                      fill="currentColor"
-                      viewBox="0 0 16 16"
+                      className="stroke-current shrink-0 h-6 w-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
                     >
-                      <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
                     </svg>
-                    Subscribe Premium (1000 BDT)
-                  </>
+                    <div>
+                      <h3 className="font-bold">Premium Member</h3>
+                      <div className="text-xs">
+                        You have unlimited access to all features!
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <button
+                    onClick={handleSubscribe}
+                    className="btn btn-warning w-full gap-2"
+                    disabled={subscribeMutation.isPending}
+                  >
+                    {subscribeMutation.isPending ? (
+                      <>
+                        <span className="loading loading-spinner loading-sm"></span>
+                        Processing...
+                      </>
+                    ) : (
+                      <>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-5 w-5"
+                          fill="currentColor"
+                          viewBox="0 0 16 16"
+                        >
+                          <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
+                        </svg>
+                        Subscribe to Premium (1000 TK)
+                      </>
+                    )}
+                  </button>
                 )}
-              </button>
-            )}
+              </div>
+            </div>
           </div>
         )}
       </div>
