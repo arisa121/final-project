@@ -304,14 +304,9 @@ const AllIssues = () => {
               {/* Image */}
               <figure className="h-48 overflow-hidden">
                 <img
-                  src={
-                    issue.images?.[0]
-                  }
+                  src={issue.images?.[0]}
                   alt={issue.title}
                   className="w-full h-full object-cover"
-                  onError={(e) => {
-                    e.target.src = "https://via.placeholder.com/400x300";
-                  }}
                 />
               </figure>
 
@@ -362,9 +357,9 @@ const AllIssues = () => {
                     />
                   </svg>
                   <span className="line-clamp-1">
-                    {issue.location?.address ||
-                      issue.location ||
-                      "Location not specified"}
+                    {issue.location?.address
+                      ? issue.location.address
+                      : "Location not specified"}
                   </span>
                 </div>
 
