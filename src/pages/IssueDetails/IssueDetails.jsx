@@ -73,23 +73,30 @@ const IssueDetails = () => {
   // Boost Mutation
   const boostMutation = useMutation({
     mutationFn: async () => {
-      const res = await axiosSecure.post(`/api/issues/${id}/boost`);
+      const res = await axiosSecure.post(`/api/payments/boost/${id}`, {
+        amount: 100,
+      });
       return res.data;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries(["issue-details", id]);
       Swal.fire({
         icon: "success",
-        title: "Boosted!",
-        text: "Your issue has been boosted to high priority!",
-        timer: 2000,
-        showConfirmButton: false,
+        title: "Issue Boosted! 🔥",
+        html: `
+          <div class="text-left">
+            <p class="mb-2">Your issue is now HIGH PRIORITY!</p>
+            <p class="text-sm text-gray-600">It will appear at the top of the list.</p>
+            <p class="mt-3 text-sm">Transaction ID: <strong>${data.payment.txnId}</strong></p>
+          </div>
+        `,
+        confirmButtonText: "Great!",
       });
     },
     onError: (error) => {
       Swal.fire({
         icon: "error",
-        title: "Error!",
+        title: "Payment Failed",
         text: error.response?.data?.message || "Failed to boost issue.",
       });
     },
@@ -152,12 +159,17 @@ const IssueDetails = () => {
     Swal.fire({
       title: "Boost This Issue?",
       html: `
-        <p>Boosting will:</p>
-        <ul style="text-align: left; margin: 10px 40px;">
-          <li>Set priority to HIGH</li>
-          <li>Move issue to top of list</li>
-          <li>Cost: 100 TK</li>
-        </ul>
+        <div class="text-left space-y-2">
+          <p class="font-semibold">Boosting will:</p>
+          <ul class="list-disc list-inside text-sm text-gray-600">
+            <li>🔥 Set priority to HIGH</li>
+            <li>⬆️ Move to top of list</li>
+            <li>👀 Increase visibility</li>
+          </ul>
+          <div class="mt-4 p-3 bg-red-50 rounded">
+            <p class="font-bold text-lg">Price: 100 TK</p>
+          </div>
+        </div>
       `,
       icon: "question",
       showCancelButton: true,
@@ -348,11 +360,57 @@ const IssueDetails = () => {
                     Delete
                   </button>
                 )}
-                {canBoost && (
-                  <button onClick={handleBoost} className="btn btn-accent">
-                    Boost Priority (100 TK)
-                  </button>
-                )}
+                {canBoost &&
+                  (issue.priority === "high" || issue.isBoosted ? (
+                    <div className="badge badge-error gap-2">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M13 10V3L4 14h7v7l9-11h-7z"
+                        />
+                      </svg>
+                      Already Boosted
+                    </div>
+                  ) : (
+                    <button
+                      onClick={handleBoost}
+                      className="btn btn-accent gap-2"
+                      disabled={boostMutation.isPending}
+                    >
+                      {boostMutation.isPending ? (
+                        <>
+                          <span className="loading loading-spinner loading-sm"></span>
+                          Processing...
+                        </>
+                      ) : (
+                        <>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M13 10V3L4 14h7v7l9-11h-7z"
+                            />
+                          </svg>
+                          Boost Priority (100 TK)
+                        </>
+                      )}
+                    </button>
+                  ))}
               </div>
             </div>
           </div>
@@ -542,9 +600,6 @@ const IssueDetails = () => {
 };
 
 export default IssueDetails;
-
-
-// import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 // import { useParams, useNavigate, Link } from "react-router";
 // import { useState } from "react";
 // import Swal from "sweetalert2";

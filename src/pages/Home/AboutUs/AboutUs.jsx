@@ -14,7 +14,7 @@ const cardVariants = {
 
 const AboutUs = () => {
   return (
-    <section className="relative py-20 bg-gradient-to-br from-sky-50 to-indigo-50 overflow-hidden">
+    <section className="container-responsive relative py-20 bg-gradient-to-br from-sky-50 to-indigo-50 overflow-hidden">
       {/* decorative circles */}
       <div className="pointer-events-none absolute -right-40 -top-40 w-96 h-96 rounded-full bg-gradient-to-tr from-indigo-200 to-transparent opacity-40 blur-3xl"></div>
       <div className="pointer-events-none absolute -left-40 -bottom-40 w-96 h-96 rounded-full bg-gradient-to-br from-sky-200 to-transparent opacity-30 blur-3xl"></div>

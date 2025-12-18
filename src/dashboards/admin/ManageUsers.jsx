@@ -77,33 +77,38 @@ const ManageUsers = () => {
   );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
         <div>
-          <h1 className="text-3xl font-bold text-gray-800">Manage Users</h1>
-          <p className="text-gray-600">View and manage citizen accounts</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">
+            Manage Users
+          </h1>
+          <p className="text-sm sm:text-base text-gray-600">
+            View and manage citizen accounts
+          </p>
         </div>
-        <div className="badge badge-lg badge-primary">
+        <div className="badge badge-md sm:badge-lg badge-primary">
           Total Users: {users?.length || 0}
         </div>
       </div>
-
       {/* Search Bar */}
       <div className="card bg-white shadow-lg">
-        <div className="card-body">
-          <div className="flex gap-4">
+        <div className="card-body p-3 sm:p-4 md:p-6">
+          <div className="relative w-full">
             <input
               type="text"
               placeholder="Search by name or email..."
-              className="input input-bordered flex-1"
+              className="input input-bordered input-sm sm:input-md w-full pr-10"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
-            <button className="btn btn-primary">
+
+            {/* Search Icon Button */}
+            <button className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-primary">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
+                className="h-4 w-4 sm:h-5 sm:w-5"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -115,70 +120,78 @@ const ManageUsers = () => {
                   d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                 />
               </svg>
-              Search
             </button>
           </div>
         </div>
       </div>
-
       {/* Users Table */}
       <div className="card bg-white shadow-lg">
         <div className="card-body p-0">
-          <div className="overflow-x-auto">
-            <table className="table">
+          <div className="overflow-x-auto -mx-3 sm:mx-0">
+            <table className="table table-xs sm:table-sm md:table-md">
               <thead className="bg-gray-50">
                 <tr>
-                  <th>User</th>
-                  <th>Email</th>
-                  <th>Subscription</th>
-                  <th>Status</th>
-                  <th>Joined</th>
-                  <th>Actions</th>
+                  <th className="text-xs sm:text-sm">User</th>
+                  <th className="text-xs sm:text-sm hidden md:table-cell">
+                    Email
+                  </th>
+                  <th className="text-xs sm:text-sm hidden lg:table-cell">
+                    Subscription
+                  </th>
+                  <th className="text-xs sm:text-sm">Status</th>
+                  <th className="text-xs sm:text-sm hidden lg:table-cell">
+                    Joined
+                  </th>
+                  <th className="text-xs sm:text-sm">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredUsers?.length === 0 ? (
                   <tr>
-                    <td colSpan="6" className="text-center py-8 text-gray-500">
-                      No users found
+                    <td
+                      colSpan="6"
+                      className="text-center py-6 sm:py-8 text-gray-500"
+                    >
+                      <div className="text-sm sm:text-base">No users found</div>
                     </td>
                   </tr>
                 ) : (
                   filteredUsers?.map((user) => (
                     <tr key={user._id} className="hover">
                       <td>
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2 sm:gap-3">
                           <div className="avatar">
-                            <div className="w-12 h-12 rounded-full ring ring-primary ring-offset-2">
-                              <img
-                                src={
-                                  user.photo
-                                 
-                                }
-                                alt={user.name}
-                              />
+                            <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full ring ring-primary ring-offset-2">
+                              <img src={user.photo} alt={user.name} />
                             </div>
                           </div>
                           <div>
-                            <div className="font-bold">{user.name}</div>
-                            <div className="text-sm text-gray-500">
+                            <div className="font-bold text-xs sm:text-sm md:text-base">
+                              {user.name}
+                            </div>
+                            <div className="text-xs text-gray-500 md:hidden break-all">
+                              {user.email}
+                            </div>
+                            <div className="text-xs text-gray-500">
                               ID: {user._id.slice(-6)}
                             </div>
                           </div>
                         </div>
                       </td>
-                      <td>
-                        <div className="text-sm">{user.email}</div>
+                      <td className="hidden md:table-cell">
+                        <div className="text-xs sm:text-sm break-all">
+                          {user.email}
+                        </div>
                       </td>
-                      <td>
+                      <td className="hidden lg:table-cell">
                         {user.isPremium ? (
-                          <div className="flex items-center gap-2">
-                            <span className="badge badge-warning gap-2">
+                          <div className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-2">
+                            <span className="badge badge-warning badge-xs sm:badge-sm gap-1 sm:gap-2">
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="currentColor"
                                 viewBox="0 0 16 16"
-                                className="w-4 h-4"
+                                className="w-3 h-3 sm:w-4 sm:h-4"
                               >
                                 <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
                               </svg>
@@ -189,15 +202,17 @@ const ManageUsers = () => {
                             </span>
                           </div>
                         ) : (
-                          <span className="badge badge-ghost">Free</span>
+                          <span className="badge badge-ghost badge-xs sm:badge-sm">
+                            Free
+                          </span>
                         )}
                       </td>
                       <td>
                         {user.isBlocked ? (
-                          <span className="badge badge-error gap-2">
+                          <span className="badge badge-error badge-xs sm:badge-sm gap-1 sm:gap-2">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
-                              className="h-4 w-4"
+                              className="h-3 w-3 sm:h-4 sm:w-4"
                               fill="none"
                               viewBox="0 0 24 24"
                               stroke="currentColor"
@@ -209,13 +224,13 @@ const ManageUsers = () => {
                                 d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"
                               />
                             </svg>
-                            Blocked
+                            <span className="hidden sm:inline">Blocked</span>
                           </span>
                         ) : (
-                          <span className="badge badge-success gap-2">
+                          <span className="badge badge-success badge-xs sm:badge-sm gap-1 sm:gap-2">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
-                              className="h-4 w-4"
+                              className="h-3 w-3 sm:h-4 sm:w-4"
                               fill="none"
                               viewBox="0 0 24 24"
                               stroke="currentColor"
@@ -227,19 +242,19 @@ const ManageUsers = () => {
                                 d="M5 13l4 4L19 7"
                               />
                             </svg>
-                            Active
+                            <span className="hidden sm:inline">Active</span>
                           </span>
                         )}
                       </td>
-                      <td>
-                        <div className="text-sm text-gray-600">
+                      <td className="hidden lg:table-cell">
+                        <div className="text-xs sm:text-sm text-gray-600">
                           {new Date(user.createdAt).toLocaleDateString()}
                         </div>
                       </td>
                       <td>
                         <button
                           onClick={() => handleBlockUnblock(user)}
-                          className={`btn btn-sm ${
+                          className={`btn btn-xs sm:btn-sm ${
                             user.isBlocked ? "btn-success" : "btn-error"
                           }`}
                           disabled={blockUserMutation.isPending}
@@ -250,7 +265,7 @@ const ManageUsers = () => {
                             <>
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
-                                className="h-4 w-4"
+                                className="h-3 w-3 sm:h-4 sm:w-4"
                                 fill="none"
                                 viewBox="0 0 24 24"
                                 stroke="currentColor"
@@ -262,13 +277,13 @@ const ManageUsers = () => {
                                   d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"
                                 />
                               </svg>
-                              Unblock
+                              <span className="hidden sm:inline">Unblock</span>
                             </>
                           ) : (
                             <>
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
-                                className="h-4 w-4"
+                                className="h-3 w-3 sm:h-4 sm:w-4"
                                 fill="none"
                                 viewBox="0 0 24 24"
                                 stroke="currentColor"
@@ -280,7 +295,7 @@ const ManageUsers = () => {
                                   d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"
                                 />
                               </svg>
-                              Block
+                              <span className="hidden sm:inline">Block</span>
                             </>
                           )}
                         </button>
@@ -295,27 +310,35 @@ const ManageUsers = () => {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
         <div className="card bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-xl">
-          <div className="card-body">
-            <h3 className="card-title text-sm opacity-90">Total Users</h3>
-            <p className="text-4xl font-bold">{users?.length || 0}</p>
+          <div className="card-body p-4 sm:p-6">
+            <h3 className="card-title text-xs sm:text-sm opacity-90">
+              Total Users
+            </h3>
+            <p className="text-2xl sm:text-3xl md:text-4xl font-bold">
+              {users?.length || 0}
+            </p>
           </div>
         </div>
 
         <div className="card bg-gradient-to-br from-yellow-500 to-yellow-600 text-white shadow-xl">
-          <div className="card-body">
-            <h3 className="card-title text-sm opacity-90">Premium Users</h3>
-            <p className="text-4xl font-bold">
+          <div className="card-body p-4 sm:p-6">
+            <h3 className="card-title text-xs sm:text-sm opacity-90">
+              Premium Users
+            </h3>
+            <p className="text-2xl sm:text-3xl md:text-4xl font-bold">
               {users?.filter((u) => u.isPremium).length || 0}
             </p>
           </div>
         </div>
 
         <div className="card bg-gradient-to-br from-red-500 to-red-600 text-white shadow-xl">
-          <div className="card-body">
-            <h3 className="card-title text-sm opacity-90">Blocked Users</h3>
-            <p className="text-4xl font-bold">
+          <div className="card-body p-4 sm:p-6">
+            <h3 className="card-title text-xs sm:text-sm opacity-90">
+              Blocked Users
+            </h3>
+            <p className="text-2xl sm:text-3xl md:text-4xl font-bold">
               {users?.filter((u) => u.isBlocked).length || 0}
             </p>
           </div>

@@ -3,7 +3,7 @@ import { FaEnvelope, FaUserTie, FaPhoneAlt, FaUsersCog } from "react-icons/fa";
 
 const ContactSection = () => {
   return (
-    <section className="relative py-20 bg-gradient-to-br from-blue-50 via-white to-blue-100">
+    <section className="container-responsive relative py-20 bg-gradient-to-br from-blue-50 via-white to-blue-100">
       {/* Background decoration */}
       <div className="absolute inset-0 pointer-events-none opacity-20 bg-[url('https://www.toptal.com/designers/subtlepatterns/uploads/dot-grid.png')]"></div>
 

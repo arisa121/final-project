@@ -5,13 +5,12 @@ import HowItWorks from '../HowItWorks/HowItWorks';
 import LatestResolvedIssues from '../LatestResolvedIssues/LatestResolvedIssues';
 const Home = () => {
     return (
-        <div>
-            <Banner></Banner>
-            <LatestResolvedIssues></LatestResolvedIssues>
-            <Features></Features>
-            <HowItWorks></HowItWorks>
-           
-        </div>
+      <div className="container-responsive">
+        <Banner></Banner>
+        <LatestResolvedIssues></LatestResolvedIssues>
+        <Features></Features>
+        <HowItWorks></HowItWorks>
+      </div>
     );
 };
 

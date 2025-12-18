@@ -1,2 +1,9 @@
 @import "tailwindcss";
 @plugin "daisyui";
+body {
+    @apply bg-gradient-to-br from-sky-50 via-indigo-50 to-purple-50 text-gray-800 min-h-screen antialiased;
+}
+.container-responsive {
+    @apply w-full md:w-11/12 lg:w-11/12 mx-auto;
+   
+}

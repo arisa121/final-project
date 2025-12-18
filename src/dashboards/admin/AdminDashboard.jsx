@@ -1,11 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router";
-import { Pie} from "react-chartjs-2";
+import { Pie } from "react-chartjs-2";
 import "chart.js/auto";
 import axiosSecure from "../../api/axiosSecure";
 
 const AdminDashboard = () => {
-  // Fetch Admin Stats
   const { data, isLoading } = useQuery({
     queryKey: ["admin-stats"],
     queryFn: async () => {
@@ -24,7 +23,6 @@ const AdminDashboard = () => {
 
   const { stats, latestIssues, latestPayments, latestUsers } = data || {};
 
-  // Chart Data - Issue Status
   const issueChartData = {
     labels: ["Pending", "In Progress", "Resolved", "Rejected"],
     datasets: [
@@ -42,7 +40,6 @@ const AdminDashboard = () => {
     ],
   };
 
-  // Chart Options
   const chartOptions = {
     responsive: true,
     maintainAspectRatio: true,
@@ -51,40 +48,39 @@ const AdminDashboard = () => {
         position: "bottom",
         labels: {
           padding: 15,
-          font: { size: 12 },
+          font: { size: window.innerWidth < 640 ? 10 : 12 },
         },
       },
     },
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Welcome Banner */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-8 rounded-2xl shadow-lg">
-        <h1 className="text-3xl font-bold mb-2">
+      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl shadow-lg">
+        <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-2">
           Welcome to Admin Dashboard 👋
         </h1>
-        <p className="text-blue-100">
+        <p className="text-sm sm:text-base text-blue-100">
           Monitor and manage the infrastructure reporting system
         </p>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {/* Total Issues */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
         <div className="card bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-xl hover:shadow-2xl transition-shadow">
-          <div className="card-body">
+          <div className="card-body p-4 sm:p-5 lg:p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-blue-100 text-sm">Total Issues</p>
-                <h2 className="text-4xl font-bold">
+                <p className="text-blue-100 text-xs sm:text-sm">Total Issues</p>
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold">
                   {stats?.totalIssues || 0}
                 </h2>
               </div>
-              <div className="bg-white/20 p-4 rounded-full">
+              <div className="bg-white/20 p-2 sm:p-3 lg:p-4 rounded-full">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-8 w-8"
+                  className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -101,20 +97,19 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        {/* Resolved Issues */}
         <div className="card bg-gradient-to-br from-green-500 to-green-600 text-white shadow-xl hover:shadow-2xl transition-shadow">
-          <div className="card-body">
+          <div className="card-body p-4 sm:p-5 lg:p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-green-100 text-sm">Resolved</p>
-                <h2 className="text-4xl font-bold">
+                <p className="text-green-100 text-xs sm:text-sm">Resolved</p>
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold">
                   {stats?.resolvedIssues || 0}
                 </h2>
               </div>
-              <div className="bg-white/20 p-4 rounded-full">
+              <div className="bg-white/20 p-2 sm:p-3 lg:p-4 rounded-full">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-8 w-8"
+                  className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -131,20 +126,19 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        {/* Pending Issues */}
         <div className="card bg-gradient-to-br from-yellow-500 to-yellow-600 text-white shadow-xl hover:shadow-2xl transition-shadow">
-          <div className="card-body">
+          <div className="card-body p-4 sm:p-5 lg:p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-yellow-100 text-sm">Pending</p>
-                <h2 className="text-4xl font-bold">
+                <p className="text-yellow-100 text-xs sm:text-sm">Pending</p>
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold">
                   {stats?.pendingIssues || 0}
                 </h2>
               </div>
-              <div className="bg-white/20 p-4 rounded-full">
+              <div className="bg-white/20 p-2 sm:p-3 lg:p-4 rounded-full">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-8 w-8"
+                  className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -161,20 +155,19 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        {/* Total Revenue */}
         <div className="card bg-gradient-to-br from-purple-500 to-purple-600 text-white shadow-xl hover:shadow-2xl transition-shadow">
-          <div className="card-body">
+          <div className="card-body p-4 sm:p-5 lg:p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-purple-100 text-sm">Revenue</p>
-                <h2 className="text-4xl font-bold">
+                <p className="text-purple-100 text-xs sm:text-sm">Revenue</p>
+                <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold">
                   {stats?.totalRevenue || 0} TK
                 </h2>
               </div>
-              <div className="bg-white/20 p-4 rounded-full">
+              <div className="bg-white/20 p-2 sm:p-3 lg:p-4 rounded-full">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-8 w-8"
+                  className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -193,49 +186,49 @@ const AdminDashboard = () => {
       </div>
 
       {/* Charts Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Issue Status Chart */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         <div className="card bg-white shadow-xl">
-          <div className="card-body">
-            <h3 className="card-title text-xl mb-4">
+          <div className="card-body p-4 sm:p-6">
+            <h3 className="card-title text-base sm:text-lg lg:text-xl mb-4">
               Issue Status Distribution
             </h3>
-            <div className="max-w-sm mx-auto">
+            <div className="w-full max-w-xs sm:max-w-sm mx-auto">
               <Pie data={issueChartData} options={chartOptions} />
             </div>
           </div>
         </div>
 
-        {/* Quick Stats */}
         <div className="card bg-white shadow-xl">
-          <div className="card-body">
-            <h3 className="card-title text-xl mb-4">Quick Overview</h3>
-            <div className="space-y-4">
-              <div className="flex justify-between items-center p-3 bg-blue-50 rounded-lg">
+          <div className="card-body p-4 sm:p-6">
+            <h3 className="card-title text-base sm:text-lg lg:text-xl mb-4">
+              Quick Overview
+            </h3>
+            <div className="space-y-3">
+              <div className="flex justify-between items-center p-2 sm:p-3 bg-blue-50 rounded-lg text-sm sm:text-base">
                 <span className="text-gray-700">Total Issues</span>
                 <span className="font-bold text-blue-600">
                   {stats?.totalIssues || 0}
                 </span>
               </div>
-              <div className="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+              <div className="flex justify-between items-center p-2 sm:p-3 bg-green-50 rounded-lg text-sm sm:text-base">
                 <span className="text-gray-700">Resolved</span>
                 <span className="font-bold text-green-600">
                   {stats?.resolvedIssues || 0}
                 </span>
               </div>
-              <div className="flex justify-between items-center p-3 bg-yellow-50 rounded-lg">
+              <div className="flex justify-between items-center p-2 sm:p-3 bg-yellow-50 rounded-lg text-sm sm:text-base">
                 <span className="text-gray-700">Pending</span>
                 <span className="font-bold text-yellow-600">
                   {stats?.pendingIssues || 0}
                 </span>
               </div>
-              <div className="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+              <div className="flex justify-between items-center p-2 sm:p-3 bg-red-50 rounded-lg text-sm sm:text-base">
                 <span className="text-gray-700">Rejected</span>
                 <span className="font-bold text-red-600">
                   {stats?.rejectedIssues || 0}
                 </span>
               </div>
-              <div className="flex justify-between items-center p-3 bg-purple-50 rounded-lg">
+              <div className="flex justify-between items-center p-2 sm:p-3 bg-purple-50 rounded-lg text-sm sm:text-base">
                 <span className="text-gray-700">Total Revenue</span>
                 <span className="font-bold text-purple-600">
                   {stats?.totalRevenue || 0} TK
@@ -248,16 +241,23 @@ const AdminDashboard = () => {
 
       {/* Latest Issues */}
       <div className="card bg-white shadow-xl">
-        <div className="card-body">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="card-title text-xl">Latest Issues</h3>
-            <Link to="/admin/all-issues" className="btn btn-sm btn-primary">
+        <div className="card-body p-0">
+          <div className="flex items-center justify-between p-4 sm:p-6 border-b">
+            <h3 className="card-title text-base sm:text-lg lg:text-xl">
+              Latest Issues
+            </h3>
+            <Link
+              to="/admin/all-issues"
+              className="btn btn-xs sm:btn-sm btn-primary"
+            >
               View All
             </Link>
           </div>
-          <div className="overflow-x-auto">
-            <table className="table">
-              <thead>
+
+          {/* Desktop Table */}
+          <div className="hidden md:block overflow-x-auto">
+            <table className="table table-sm lg:table-md">
+              <thead className="bg-gray-50">
                 <tr>
                   <th>Title</th>
                   <th>Category</th>
@@ -269,15 +269,15 @@ const AdminDashboard = () => {
               <tbody>
                 {latestIssues?.map((issue) => (
                   <tr key={issue._id} className="hover">
-                    <td className="font-medium">{issue.title}</td>
+                    <td className="font-medium text-sm">{issue.title}</td>
                     <td>
-                      <span className="badge badge-outline">
+                      <span className="badge badge-outline badge-sm">
                         {issue.category}
                       </span>
                     </td>
                     <td>
                       <span
-                        className={`badge ${
+                        className={`badge badge-sm ${
                           issue.status === "pending"
                             ? "badge-warning"
                             : issue.status === "resolved"
@@ -288,24 +288,62 @@ const AdminDashboard = () => {
                         {issue.status}
                       </span>
                     </td>
-                    <td>{issue.reporter?.name}</td>
-                    <td>{new Date(issue.createdAt).toLocaleDateString()}</td>
+                    <td className="text-sm">{issue.reporter?.name}</td>
+                    <td className="text-xs">
+                      {new Date(issue.createdAt).toLocaleDateString()}
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
+
+          {/* Mobile Cards */}
+          <div className="md:hidden divide-y">
+            {latestIssues?.map((issue) => (
+              <div key={issue._id} className="p-4 space-y-2">
+                <div className="font-medium text-sm truncate">
+                  {issue.title}
+                </div>
+                <div className="flex gap-2 flex-wrap">
+                  <span className="badge badge-outline badge-xs">
+                    {issue.category}
+                  </span>
+                  <span
+                    className={`badge badge-xs ${
+                      issue.status === "pending"
+                        ? "badge-warning"
+                        : issue.status === "resolved"
+                        ? "badge-success"
+                        : "badge-info"
+                    }`}
+                  >
+                    {issue.status}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between text-xs text-gray-500">
+                  <span>{issue.reporter?.name}</span>
+                  <span>{new Date(issue.createdAt).toLocaleDateString()}</span>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
       {/* Latest Payments & Users */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         {/* Latest Payments */}
         <div className="card bg-white shadow-xl">
-          <div className="card-body">
+          <div className="card-body p-4 sm:p-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="card-title text-xl">Latest Payments</h3>
-              <Link to="/admin/payments" className="btn btn-sm btn-primary">
+              <h3 className="card-title text-base sm:text-lg lg:text-xl">
+                Latest Payments
+              </h3>
+              <Link
+                to="/admin/payments"
+                className="btn btn-xs sm:btn-sm btn-primary"
+              >
                 View All
               </Link>
             </div>
@@ -313,13 +351,17 @@ const AdminDashboard = () => {
               {latestPayments?.map((payment) => (
                 <div
                   key={payment._id}
-                  className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition"
+                  className="flex items-center justify-between p-2 sm:p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition"
                 >
-                  <div>
-                    <p className="font-medium">{payment.user?.name}</p>
-                    <p className="text-sm text-gray-600">{payment.type}</p>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium text-sm sm:text-base truncate">
+                      {payment.user?.name}
+                    </p>
+                    <p className="text-xs sm:text-sm text-gray-600">
+                      {payment.type}
+                    </p>
                   </div>
-                  <span className="font-bold text-green-600">
+                  <span className="font-bold text-green-600 text-sm sm:text-base whitespace-nowrap ml-2">
                     {payment.amount} TK
                   </span>
                 </div>
@@ -330,10 +372,15 @@ const AdminDashboard = () => {
 
         {/* Latest Users */}
         <div className="card bg-white shadow-xl">
-          <div className="card-body">
+          <div className="card-body p-4 sm:p-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="card-title text-xl">Latest Users</h3>
-              <Link to="/admin/manage-users" className="btn btn-sm btn-primary">
+              <h3 className="card-title text-base sm:text-lg lg:text-xl">
+                Latest Users
+              </h3>
+              <Link
+                to="/admin/manage-users"
+                className="btn btn-xs sm:btn-sm btn-primary"
+              >
                 View All
               </Link>
             </div>
@@ -341,22 +388,26 @@ const AdminDashboard = () => {
               {latestUsers?.map((user) => (
                 <div
                   key={user._id}
-                  className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition"
+                  className="flex items-center gap-2 sm:gap-3 p-2 sm:p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition"
                 >
                   <div className="avatar">
-                    <div className="w-10 h-10 rounded-full">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full">
                       <img
                         src={user.photo || "https://via.placeholder.com/150"}
                         alt={user.name}
                       />
                     </div>
                   </div>
-                  <div className="flex-1">
-                    <p className="font-medium">{user.name}</p>
-                    <p className="text-sm text-gray-600">{user.email}</p>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium text-sm sm:text-base truncate">
+                      {user.name}
+                    </p>
+                    <p className="text-xs sm:text-sm text-gray-600 truncate">
+                      {user.email}
+                    </p>
                   </div>
                   {user.isPremium && (
-                    <span className="badge badge-warning badge-sm">
+                    <span className="badge badge-warning badge-xs sm:badge-sm whitespace-nowrap">
                       Premium
                     </span>
                   )}

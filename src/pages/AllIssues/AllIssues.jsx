@@ -150,7 +150,7 @@ const AllIssues = () => {
   const totalPages = Math.ceil(total / filters.limit);
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container-responsive px-4 py-8">
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-800 mb-2">All Issues</h1>
@@ -161,7 +161,6 @@ const AllIssues = () => {
 
       {/* Filters Section */}
       <div className="bg-white p-6 rounded-lg shadow-md mb-8">
-        {/* Search Bar */}
         <form onSubmit={handleSearch} className="mb-4">
           <div className="flex gap-2">
             <input
@@ -198,11 +197,17 @@ const AllIssues = () => {
             value={filters.category}
             onChange={(e) => handleFilterChange("category", e.target.value)}
           >
-            <option value="">All Categories</option>
+            <option value="">Select Category</option>
             <option value="Road">Road</option>
             <option value="Garbage">Garbage</option>
             <option value="Water">Water</option>
+            <option value="Streetlights">Streetlights</option>
             <option value="Electricity">Electricity</option>
+            <option value="Traffic">Traffic</option>
+            <option value="Safety">Safety</option>
+            <option value="Health">Health</option>
+            <option value="Public Services">Public Services</option>
+            <option value="Others">Others</option>
           </select>
 
           <select
@@ -357,9 +362,7 @@ const AllIssues = () => {
                     />
                   </svg>
                   <span className="line-clamp-1">
-                    {issue.location?.address
-                      ? issue.location.address
-                      : "Location not specified"}
+                    {issue.location || "Location not specified"}
                   </span>
                 </div>
 

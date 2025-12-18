@@ -1,16 +1,145 @@
-# React + Vite
+IssueTracker – Civic Issue Management System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-stack web application that allows citizens to report public issues, administrators to manage them efficiently, and staff members to resolve assigned issues.
+The system includes role-based dashboards, payments, analytics, and secure authentication.
 
-Currently, two official plugins are available:
+🚀 Live Demo
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Client: (Add your live frontend URL here)
 
-## React Compiler
+Server: (Add your live backend URL here)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+🧩 Features
+👤 Authentication & Authorization
 
-## Expanding the ESLint configuration
+Firebase Authentication (Email/Password & Google Login)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Firebase Admin SDK for token verification
+
+JWT-based secure API access
+
+Role-based access control:
+
+Admin
+
+Staff
+
+Citizen
+
+🧑‍💼 Roles & Permissions
+👑 Admin
+
+View dashboard analytics
+
+Manage all users (Admin / Staff / Citizen)
+
+Assign issues to staff
+
+Change issue status
+
+View all payments & revenue charts
+
+Download payment invoices (PDF)
+
+Block / unblock users
+
+🧑‍🔧 Staff
+
+View assigned issues
+
+Update issue progress
+
+Mark issues as resolved
+
+🧍 Citizen
+
+Report public issues
+
+Upload images & location
+
+Boost issues (paid)
+
+Premium subscription
+
+Track issue status
+
+View personal payment history
+
+Download invoices (PDF)
+
+🐞 Issue Management
+
+Categories:
+
+Roads, Garbage, Water, Electricity, Streetlights, Traffic, Environment, Safety, Health, Public Services
+
+Issue priority & status tracking
+
+Location support (address, latitude, longitude)
+
+Image uploads
+
+Upvote & boost system
+
+💳 Payment System
+
+Premium subscription
+
+Issue boost payments
+
+Admin payment analytics (monthly revenue)
+
+Payment filters (type & date)
+
+Downloadable invoice PDF (Admin & User)
+
+📊 Dashboard & Analytics
+
+Revenue charts using Chart.js
+
+Monthly payment statistics
+
+Issue summary & activity overview
+
+🛠️ Tech Stack
+Frontend
+
+React (Vite)
+
+React Router
+
+React Hook Form
+
+TanStack React Query
+
+Axios
+
+Tailwind CSS
+
+DaisyUI
+
+Chart.js
+
+React PDF (Invoice generation)
+
+SweetAlert2
+
+Backend
+
+Node.js
+
+Express.js
+
+MongoDB + Mongoose
+
+Firebase Admin SDK
+
+JWT
+
+dotenv
+
+CORS
+
+Database
+
+MongoDB Atlas

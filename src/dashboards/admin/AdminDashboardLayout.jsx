@@ -1,91 +1,13 @@
-// import { Outlet, NavLink } from "react-router";
-// import {
-//   FaChartPie,
-//   FaUsers,
-//   FaListAlt,
-//   FaUserShield,
-//   FaMoneyBill,
-// } from "react-icons/fa";
-
-// const AdminDashboardLayout = () => {
-//   const navItem =
-//     "flex items-center gap-3 p-3 rounded-lg text-gray-700 hover:bg-green-100 transition cursor-pointer";
-//   const activeClass = "bg-green-500 text-white font-semibold";
-
-//   return (
-//     <div className="min-h-screen bg-gray-100 flex">
-//       {/* Sidebar */}
-//       <aside className="w-64 bg-white shadow-lg p-5 space-y-6 hidden md:block">
-//         <h2 className="text-xl font-bold text-green-600">Admin Dashboard</h2>
-
-//         <nav className="space-y-3">
-//           <NavLink
-//             to="/admin"
-//             className={({ isActive }) =>
-//               `${navItem} ${isActive ? activeClass : ""}`
-//             }
-//           >
-//             <FaChartPie /> Overview
-//           </NavLink>
-
-//           <NavLink
-//             to="/admin/all-issues"
-//             className={({ isActive }) =>
-//               `${navItem} ${isActive ? activeClass : ""}`
-//             }
-//           >
-//             <FaListAlt /> All Issues
-//           </NavLink>
-
-//           <NavLink
-//             to="/admin/manage-users"
-//             className={({ isActive }) =>
-//               `${navItem} ${isActive ? activeClass : ""}`
-//             }
-//           >
-//             <FaUsers /> Manage Users
-//           </NavLink>
-
-//           <NavLink
-//             to="/admin/manage-staff"
-//             className={({ isActive }) =>
-//               `${navItem} ${isActive ? activeClass : ""}`
-//             }
-//           >
-//             <FaUserShield /> Manage Staff
-//           </NavLink>
-
-//           <NavLink
-//             to="/admin/payments"
-//             className={({ isActive }) =>
-//               `${navItem} ${isActive ? activeClass : ""}`
-//             }
-//           >
-//             <FaMoneyBill /> Payments
-//           </NavLink>
-//         </nav>
-//       </aside>
-
-//       {/* Main Content */}
-//       <main className="flex-1 p-6">
-//         <Outlet />
-//       </main>
-//     </div>
-//   );
-// };
-
-// export default AdminDashboardLayout;
-
 import { useState } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router";
 import Swal from "sweetalert2";
 import useAuth from "../../hook/useAuth";
 
 const AdminDashboardLayout = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const { user, logOut } = useAuth()
+  const { user, logOut } = useAuth();
 
   const handleLogout = () => {
     Swal.fire({
@@ -226,73 +148,99 @@ const AdminDashboardLayout = () => {
       label: "Profile",
     },
     {
-      
-  path: "/",
-  icon: (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className="h-5 w-5"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M3 9.75L12 3l9 6.75V21a.75.75 0 01-.75.75H3.75A.75.75 0 013 21V9.75z"
-      />
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M9 21V12h6v9"
-      />
-    </svg>
-  ),
-  label: "Home",
-
-    }
+      path: "/",
+      icon: (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M3 9.75L12 3l9 6.75V21a.75.75 0 01-.75.75H3.75A.75.75 0 013 21V9.75z"
+          />
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M9 21V12h6v9"
+          />
+        </svg>
+      ),
+      label: "Home",
+    },
   ];
+
+  const closeSidebar = () => {
+    if (window.innerWidth < 1024) {
+      setSidebarOpen(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 z-40 h-screen transition-transform ${
+        className={`fixed top-0 left-0 z-40 h-screen transition-transform duration-300 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } bg-gradient-to-b from-blue-600 to-blue-800 text-white shadow-2xl`}
-        style={{ width: "280px" }}
+        } bg-gradient-to-b from-blue-600 to-blue-800 text-white shadow-2xl w-64 lg:w-72 lg:translate-x-0`}
       >
         {/* Logo */}
-        <div className="h-20 flex items-center justify-center border-b border-blue-500/30">
-          <div className="text-center">
-            <h1 className="text-2xl font-bold">Admin Panel</h1>
+        <div className="h-16 lg:h-20 flex items-center justify-between px-4 border-b border-blue-500/30">
+          <div className="text-center flex-1">
+            <h1 className="text-xl lg:text-2xl font-bold">Admin Panel</h1>
             <p className="text-xs text-blue-200">Infrastructure Management</p>
           </div>
+          {/* Close button for mobile */}
+          <button
+            onClick={() => setSidebarOpen(false)}
+            className="lg:hidden text-white hover:bg-blue-700 p-2 rounded-lg"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
         </div>
 
         {/* Menu Items */}
-        <nav className="p-4 space-y-2">
+        <nav className="p-3 lg:p-4 space-y-1 lg:space-y-2 overflow-y-auto h-[calc(100vh-180px)] lg:h-[calc(100vh-200px)]">
           {menuItems.map((item) => (
             <Link
               key={item.path}
               to={item.path}
-              className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
+              onClick={closeSidebar}
+              className={`flex items-center gap-3 px-3 lg:px-4 py-2.5 lg:py-3 rounded-lg transition-all ${
                 location.pathname === item.path
                   ? "bg-white text-blue-600 shadow-lg"
                   : "text-white hover:bg-blue-700/50"
               }`}
             >
               {item.icon}
-              <span className="font-medium">{item.label}</span>
+              <span className="font-medium text-sm lg:text-base">
+                {item.label}
+              </span>
             </Link>
           ))}
 
           {/* Logout Button */}
           <button
             onClick={handleLogout}
-            className="flex items-center gap-3 px-4 py-3 rounded-lg w-full text-white hover:bg-red-500/50 transition-all mt-4"
+            className="flex items-center gap-3 px-3 lg:px-4 py-2.5 lg:py-3 rounded-lg w-full text-white hover:bg-red-500/50 transition-all mt-4"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -308,41 +256,42 @@ const AdminDashboardLayout = () => {
                 d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
               />
             </svg>
-            <span className="font-medium">Logout</span>
+            <span className="font-medium text-sm lg:text-base">Logout</span>
           </button>
         </nav>
 
         {/* Admin Info */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-blue-500/30">
-          <div className="flex items-center gap-3">
+        <div className="absolute bottom-0 left-0 right-0 p-3 lg:p-4 border-t border-blue-500/30 bg-gradient-to-b from-transparent to-blue-900/20">
+          <div className="flex items-center gap-2 lg:gap-3">
             <div className="avatar">
-              <div className="w-10 h-10 rounded-full ring ring-white ring-offset-2 ring-offset-blue-600">
-                <img
-                  src={user?.photo}
-                  alt={user?.name}
-                />
+              <div className="w-9 h-9 lg:w-10 lg:h-10 rounded-full ring ring-white ring-offset-2 ring-offset-blue-600">
+                <img src={user?.photo} alt={user?.name} />
               </div>
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold truncate">{user?.name}</p>
-              <p className="text-xs text-blue-200 truncate">{user?.email}</p>
+              <p className="text-xs lg:text-sm font-semibold truncate">
+                {user?.name}
+              </p>
+              <p className="text-[10px] lg:text-xs text-blue-200 truncate">
+                {user?.email}
+              </p>
             </div>
           </div>
         </div>
       </aside>
 
       {/* Main Content */}
-      <div className={`transition-all ${sidebarOpen ? "ml-[270px]" : "ml-0"}`}>
+      <div className="lg:ml-72">
         {/* Top Navbar */}
-        <header className="h-20 bg-white shadow-md flex items-center justify-between px-6 sticky top-0 z-30">
+        <header className="h-14 lg:h-20 bg-white shadow-md flex items-center justify-between px-3 sm:px-4 lg:px-6 sticky top-0 z-30">
           {/* Menu Toggle */}
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="btn btn-ghost btn-circle"
+            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
+              className="h-6 w-6 text-gray-700"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -357,50 +306,45 @@ const AdminDashboardLayout = () => {
           </button>
 
           {/* Page Title */}
-          <div>
-            <h2 className="text-xl font-bold text-gray-800">
+          <div className="flex-1 px-2 sm:px-4">
+            <h2 className="text-sm sm:text-base lg:text-xl font-bold text-gray-800 truncate">
               {menuItems.find((item) => item.path === location.pathname)
                 ?.label || "Dashboard"}
             </h2>
           </div>
 
           {/* Right Side Actions */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-3 lg:gap-4">
             {/* Notifications */}
-            <button className="btn btn-ghost btn-circle">
-              <div className="indicator">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                  />
-                </svg>
-                <span className="badge badge-xs badge-error indicator-item"></span>
-              </div>
+            <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors relative">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 lg:h-6 lg:w-6 text-gray-700"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                />
+              </svg>
+              <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
             </button>
 
             {/* Admin Avatar */}
             <div className="avatar">
-              <div className="w-10 h-10 rounded-full ring ring-blue-500 ring-offset-2">
-                <img
-                  src={user?.photo}
-                  alt={user?.name}
-                />
+              <div className="w-8 h-8 lg:w-10 lg:h-10 rounded-full ring ring-blue-500 ring-offset-2">
+                <img src={user?.photo} alt={user?.name} />
               </div>
             </div>
           </div>
         </header>
 
         {/* Page Content */}
-        <main className="p-6">
+        <main className="p-3 sm:p-4 lg:p-6 min-h-[calc(100vh-56px)] lg:min-h-[calc(100vh-80px)]">
           <Outlet />
         </main>
       </div>
