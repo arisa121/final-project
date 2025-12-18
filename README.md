@@ -1,7 +1,6 @@
-IssueTracker – Civic Issue Management System
+IssueTracker – Issue Management System
 
-A full-stack web application that allows citizens to report public issues, administrators to manage them efficiently, and staff members to resolve assigned issues.
-The system includes role-based dashboards, payments, analytics, and secure authentication.
+A full-stack web application that allows citizens to report public issues, administrators to manage them efficiently, and staff members to resolve assigned issues. The system includes role-based dashboards, payments, analytics, and secure authentication.
 
 🚀 Live Demo
 
@@ -9,8 +8,7 @@ Client: (Add your live frontend URL here)
 
 Server: (Add your live backend URL here)
 
-🧩 Features
-👤 Authentication & Authorization
+🧩 Features 👤 Authentication & Authorization
 
 Firebase Authentication (Email/Password & Google Login)
 
@@ -26,8 +24,7 @@ Staff
 
 Citizen
 
-🧑‍💼 Roles & Permissions
-👑 Admin
+🧑‍💼 Roles & Permissions 👑 Admin
 
 View dashboard analytics
 
@@ -101,8 +98,7 @@ Monthly payment statistics
 
 Issue summary & activity overview
 
-🛠️ Tech Stack
-Frontend
+🛠️ Tech Stack Frontend
 
 React (Vite)
 
