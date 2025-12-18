@@ -1,229 +1,112 @@
-// import { toast } from "react-toastify";
-// import axiosSecure from "../../api/axiosSecure";
-// import { useMutation, useQueryClient } from "@tanstack/react-query";
-// import { useState } from "react";
-
-
-// const ReportIssue = () => {
-//     const [title, setTitle] = useState("");
-//     const [description, setDescription] = useState("");
-//     const [category, setCategory] = useState("Road");
-//     const [imageFile, setImageFile] = useState(null);
-//     const [location, setLocation] = useState("");
-
-//     const qc = useQueryClient();
-
-//     const uploadImageToCloudinary = async (file) => {
-//       if (!file) return null;
-//       const form = new FormData();
-//       form.append("file", file);
-//       form.append(
-//         "upload_preset",
-//         import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
-//       );
-//       const url = `https://api.cloudinary.com/v1_1/${
-//         import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
-//       }/image/upload`;
-//       const res = await fetch(url, { method: "POST", body: form });
-//       const data = await res.json();
-//       if (!data.secure_url) throw new Error("Image upload failed");
-//       return data.secure_url;
-//     };
-
-//     const mutation = useMutation({
-//       mutationFn: async (payload) => {
-//         const res = await axiosSecure.post("/issues", payload);
-//         return res.data;
-//       },
-//       onSuccess: () => {
-//         toast.success("Issue reported");
-//         qc.invalidateQueries(["my-issues"]);
-//         setTitle("");
-//         setDescription("");
-//         setCategory("Road");
-//         setImageFile(null);
-//         setLocation("");
-//       },
-//       onError: (err) => {
-//         toast.error(err?.response?.data?.message || "Failed");
-//       },
-//     });
-
-//     const handleSubmit = async (e) => {
-//       e.preventDefault();
-//       try {
-//         toast.loading("Uploading...");
-//         const imageUrl = imageFile
-//           ? await uploadImageToCloudinary(imageFile)
-//           : null;
-//         toast.dismiss();
-//         mutation.mutate({
-//           title,
-//           description,
-//           category,
-//           image: imageUrl,
-//           location,
-//         });
-//       } catch (err) {
-//         console.log(err);
-//         toast.dismiss();
-//         toast.error("Image upload failed");
-//       }
-//     };
-
-
-//     return (
-//       <div className="max-w-3xl mx-auto">
-//         <h2 className="text-2xl font-bold mb-4">Report New Issue</h2>
-
-//         <form
-//           onSubmit={handleSubmit}
-//           className="space-y-4 bg-white p-6 rounded shadow"
-//         >
-//           <input
-//             className="input w-full"
-//             placeholder="Title"
-//             value={title}
-//             onChange={(e) => setTitle(e.target.value)}
-//             required
-//           />
-//           <select
-//             className="select w-full"
-//             value={category}
-//             onChange={(e) => setCategory(e.target.value)}
-//           >
-//             <option>Road</option>
-//             <option>Streetlight</option>
-//             <option>Drainage</option>
-//             <option>Garbage</option>
-//             <option>Footpath</option>
-//           </select>
-
-//           <textarea
-//             className="textarea w-full"
-//             rows="5"
-//             placeholder="Description"
-//             value={description}
-//             onChange={(e) => setDescription(e.target.value)}
-//             required
-//           />
-
-//           <input
-//             type="text"
-//             className="input w-full"
-//             placeholder="Location (address)"
-//             value={location}
-//             onChange={(e) => setLocation(e.target.value)}
-//           />
-
-//           <div>
-//             <label className="block text-sm font-medium mb-1">
-//               Photo (optional)
-//             </label>
-//             <input
-//               type="file"
-//               accept="image/*"
-//               onChange={(e) => setImageFile(e.target.files[0])}
-//             />
-//           </div>
-
-//           <div className="flex gap-3">
-//             <button type="submit" className="btn btn-primary">
-//               Submit Issue
-//             </button>
-//             <button
-//               type="button"
-//               className="btn btn-ghost"
-//               onClick={() => {
-//                 setTitle("");
-//                 setDescription("");
-//                 setCategory("Road");
-//                 setImageFile(null);
-//                 setLocation("");
-//               }}
-//             >
-//               Reset
-//             </button>
-//           </div>
-//         </form>
-//       </div>
-//     );
-// };
-
-// export default ReportIssue;
-
-
-// src/dashboards/citizen/ReportIssue.jsx
-// import React, { useState } from "react";
-// import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-// import axiosSecure from "../../api/axiosSecure";
+// import { useMutation } from "@tanstack/react-query";
 // import { useNavigate } from "react-router";
+// import useAuth from "../../hook/useAuth";
+// import axiosSecure from "../../api/axiosSecure";
 
 // const ReportIssue = () => {
-//   const qc = useQueryClient();
+//   const { user } = useAuth();
 //   const navigate = useNavigate();
-//   const { data: userStats } = useQuery({ queryKey: ["user-data"], queryFn: async ()=> (await axiosSecure.get("/auth/me")).data });
-//   // userStats should contain isPremium and totalIssuesCount
 
-//   const [form, setForm] = useState({ title:"", description:"", category:"road", location:"" });
-//   const [image, setImage] = useState(null);
-//   const create = useMutation({
-//     mutationFn: async (payload) => {
-//       const fd = new FormData();
-//       Object.keys(payload).forEach(k => fd.append(k, payload[k]));
-//       const res = await axiosSecure.post("/issues", fd, { headers: { "Content-Type": "multipart/form-data" }});
-//       return res.data;
+//   const mutation = useMutation({
+//     mutationFn: async (data) => {
+//       return axiosSecure.post("/api/issues", data);
 //     },
-//     onSuccess: () => {
-//       qc.invalidateQueries(["my-issues"]);
-//       navigate("/dashboard/my-issues");
-//     }
+//     onSuccess: () => navigate("/citizen/my-issues"),
 //   });
-
-//   // User limit enforcement
-//   const isBlocked = userStats?.isBlocked;
-//   const isPremium = userStats?.isPremium;
-//   const userIssueCount = userStats?.issueCount || 0;
-//   const reachedLimit = !isPremium && userIssueCount >= 3;
 
 //   const handleSubmit = (e) => {
 //     e.preventDefault();
-//     if (isBlocked) return alert("Your account is blocked.");
-//     if (reachedLimit) return alert("Free plan limit reached. Subscribe to continue.");
-//     const payload = { ...form };
-//     if (image) payload.image = image;
-//     create.mutate(payload);
+
+//     const form = e.target;
+
+//     const newIssue = {
+//       title: form.title.value,
+//       description: form.description.value,
+//       category: form.category.value,
+//       image: form.image.value,
+//       address: form.address.value,
+//     };
+
+//     mutation.mutate(newIssue);
 //   };
 
 //   return (
-//     <div>
-//       <h2 className="text-2xl font-bold mb-4">Report New Issue</h2>
-//       <form onSubmit={handleSubmit} className="bg-white p-4 rounded shadow max-w-lg">
-//         <input required value={form.title} onChange={(e)=>setForm({...form,title:e.target.value})} className="input w-full mb-2" placeholder="Title" />
-//         <textarea required value={form.description} onChange={(e)=>setForm({...form,description:e.target.value})} className="input w-full mb-2" placeholder="Description" rows={4} />
-//         <select value={form.category} onChange={(e)=>setForm({...form,category:e.target.value})} className="input w-full mb-2">
-//           <option value="road">Road</option><option value="water">Water</option><option value="electricity">Electricity</option><option value="garbage">Garbage</option><option value="other">Other</option>
+//     <div className="p-3 sm:p-4 lg:p-6 max-w-full sm:max-w-xl mx-auto">
+//       <h2 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4">
+//         Report New Issue
+//       </h2>
+
+//       {user.isBlocked && (
+//         <p className="p-3 bg-red-200 text-red-700 rounded mb-4">
+//           You are blocked. Cannot report issues.
+//         </p>
+//       )}
+
+//       <form onSubmit={handleSubmit} className="space-y-2 sm:space-y-3">
+//         <input
+//           name="title"
+//           type="text"
+//           placeholder="Issue Title"
+//           className="input input-bordered input-sm sm:input-md w-full"
+//           required
+//         />
+
+//         <textarea
+//           name="description"
+//           placeholder="Issue Description"
+//           className="textarea textarea-bordered textarea-sm sm:textarea-md w-full"
+//           required
+//         />
+
+//         <select
+//           name="category"
+//           className="select select-bordered select-sm sm:select-md w-full"
+//           required
+//         >
+//           <option value="">Select Category</option>
+//           <option value="Road">Road</option>
+//           <option value="Garbage">Garbage</option>
+//           <option value="Water">Water</option>
+//           <option value="Streetlights">Streetlights</option>
+//           <option value="Electricity">Electricity</option>
+//           <option value="Traffic">Traffic</option>
+//           <option value="Safety">Safety</option>
+//           <option value="Health">Health</option>
+//           <option value="Public Services">Public Services</option>
+//           <option value="Others">Others</option>
 //         </select>
-//         <input value={form.location} onChange={(e)=>setForm({...form,location:e.target.value})} className="input w-full mb-2" placeholder="Location (address or coords)" />
-//         <input type="file" onChange={e=>setImage(e.target.files[0])} className="mb-2" />
-//         {reachedLimit && (
-//           <div className="p-2 bg-yellow-100 mb-2 rounded">
-//             Free plan limit reached. <button type="button" className="underline" onClick={()=>navigate("/dashboard/profile")}>Subscribe Now</button>
-//           </div>
-//         )}
-//         <div className="flex justify-end gap-2">
-//           <button type="submit" disabled={reachedLimit || isBlocked} className={`btn ${ (reachedLimit || isBlocked) ? "opacity-50 cursor-not-allowed" : "" }`}>Submit</button>
-//         </div>
+
+//         <input
+//           name="image"
+//           type="text"
+//           placeholder="Image URL"
+//           className="input input-bordered input-sm sm:input-md w-full"
+//         />
+
+//         <input
+//           name="address"
+//           type="text"
+//           placeholder="Location"
+//           className="input input-bordered input-sm sm:input-md w-full"
+//         />
+
+//         <button className="btn btn-primary btn-sm sm:btn-md w-full">
+//           Submit Issue
+//         </button>
 //       </form>
 //     </div>
 //   );
 // };
 
 // export default ReportIssue;
+
+
+
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
 import useAuth from "../../hook/useAuth";
 import axiosSecure from "../../api/axiosSecure";
+import Swal from "sweetalert2";
 
 const ReportIssue = () => {
   const { user } = useAuth();
@@ -233,12 +116,27 @@ const ReportIssue = () => {
     mutationFn: async (data) => {
       return axiosSecure.post("/api/issues", data);
     },
-    onSuccess: () => navigate("/dashboard/my-issues"),
+    onSuccess: () => {
+      Swal.fire({
+        icon: "success",
+        title: "Success!",
+        text: "Issue reported successfully",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+      navigate("/citizen/my-issues");
+    },
+    onError: (error) => {
+      Swal.fire({
+        icon: "error",
+        title: "Error!",
+        text: error.response?.data?.message || "Failed to report issue",
+      });
+    },
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     const form = e.target;
 
     const newIssue = {
@@ -246,66 +144,168 @@ const ReportIssue = () => {
       description: form.description.value,
       category: form.category.value,
       image: form.image.value,
-      location: form.location.value,
+      address: form.address.value,
     };
 
     mutation.mutate(newIssue);
   };
 
   return (
-    <div className="p-6 max-w-xl mx-auto">
-      <h2 className="text-2xl font-semibold mb-4">Report New Issue</h2>
+    <div className="max-w-full sm:max-w-2xl mx-auto">
+      <div className="bg-white p-4 sm:p-6 lg:p-8 rounded-xl shadow-lg">
+        <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-4 sm:mb-6 text-gray-800">
+          Report New Issue
+        </h2>
 
-      {user.isBlocked && (
-        <p className="p-3 bg-red-200 text-red-700 rounded mb-4">
-          You are blocked. Cannot report issues.
-        </p>
-      )}
+        {user?.isBlocked && (
+          <div className="alert alert-error mb-4 text-sm sm:text-base">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="stroke-current shrink-0 h-5 w-5 sm:h-6 sm:w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <span>You are blocked. Cannot report issues.</span>
+          </div>
+        )}
 
-      <form onSubmit={handleSubmit} className="space-y-3">
-        <input
-          name="title"
-          type="text"
-          placeholder="Issue Title"
-          className="input input-bordered w-full"
-          required
-        />
+        <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
+          {/* Title */}
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text text-sm sm:text-base font-medium">
+                Issue Title <span className="text-red-500">*</span>
+              </span>
+            </label>
+            <input
+              name="title"
+              type="text"
+              placeholder="Enter issue title (e.g., Broken streetlight)"
+              className="input input-bordered input-sm sm:input-md w-full"
+              required
+              disabled={user?.isBlocked}
+            />
+          </div>
 
-        <textarea
-          name="description"
-          placeholder="Issue Description"
-          className="textarea textarea-bordered w-full"
-          required
-        />
+          {/* Description */}
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text text-sm sm:text-base font-medium">
+                Description <span className="text-red-500">*</span>
+              </span>
+            </label>
+            <textarea
+              name="description"
+              placeholder="Describe the issue in detail..."
+              className="textarea textarea-bordered textarea-sm sm:textarea-md w-full h-24 sm:h-32"
+              required
+              disabled={user?.isBlocked}
+            />
+          </div>
 
-        <select
-          name="category"
-          className="select select-bordered w-full"
-          required
-        >
-          <option value="">Select Category</option>
-          <option value="Road">Road</option>
-          <option value="Garbage">Garbage</option>
-          <option value="Water">Water</option>
-          <option value="Water">Others</option>
-        </select>
+          {/* Category */}
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text text-sm sm:text-base font-medium">
+                Category <span className="text-red-500">*</span>
+              </span>
+            </label>
+            <select
+              name="category"
+              className="select select-bordered select-sm sm:select-md w-full"
+              required
+              disabled={user?.isBlocked}
+            >
+              <option value="">Select Category</option>
+              <option value="Road">Road</option>
+              <option value="Garbage">Garbage</option>
+              <option value="Water">Water</option>
+              <option value="Streetlights">Streetlights</option>
+              <option value="Electricity">Electricity</option>
+              <option value="Traffic">Traffic</option>
+              <option value="Safety">Safety</option>
+              <option value="Health">Health</option>
+              <option value="Public Services">Public Services</option>
+              <option value="Others">Others</option>
+            </select>
+          </div>
 
-        <input
-          name="image"
-          type="text"
-          placeholder="Image URL"
-          className="input input-bordered w-full"
-        />
+          {/* Image URL */}
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text text-sm sm:text-base font-medium">
+                Image URL
+              </span>
+              <span className="label-text-alt text-xs">Optional</span>
+            </label>
+            <input
+              name="image"
+              type="url"
+              placeholder="https://example.com/image.jpg"
+              className="input input-bordered input-sm sm:input-md w-full"
+              disabled={user?.isBlocked}
+            />
+          </div>
 
-        <input
-          name="location"
-          type="text"
-          placeholder="Location"
-          className="input input-bordered w-full"
-        />
+          {/* Address */}
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text text-sm sm:text-base font-medium">
+                Location <span className="text-red-500">*</span>
+              </span>
+            </label>
+            <input
+              name="address"
+              type="text"
+              placeholder="Enter exact location or address"
+              className="input input-bordered input-sm sm:input-md w-full"
+              required
+              disabled={user?.isBlocked}
+            />
+          </div>
 
-        <button className="btn btn-primary w-full">Submit Issue</button>
-      </form>
+          {/* Submit Button */}
+          <div className="pt-2">
+            <button
+              type="submit"
+              className="btn btn-primary btn-sm sm:btn-md w-full"
+              disabled={user?.isBlocked || mutation.isPending}
+            >
+              {mutation.isPending ? (
+                <>
+                  <span className="loading loading-spinner loading-xs sm:loading-sm"></span>
+                  Submitting...
+                </>
+              ) : (
+                <>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4 sm:h-5 sm:w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 4v16m8-8H4"
+                    />
+                  </svg>
+                  <span className="text-sm sm:text-base">Submit Issue</span>
+                </>
+              )}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };
