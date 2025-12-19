@@ -1,6 +1,6 @@
 import { Link, NavLink, useNavigate } from "react-router";
 import useAuth from "../../hook/useAuth";
-
+import Logo from "../../assets/website_Logo.png"
 const Navbar = () => {
   const { user, logOut, role } = useAuth();
   const navigate = useNavigate();
@@ -26,7 +26,7 @@ const Navbar = () => {
       <div className="navbar-start">
         <Link to="/" className="flex items-center gap-1.5 sm:gap-2">
           <img
-            src="/logo.png"
+            src={Logo}
             alt="Logo"
             className="w-7 h-7 sm:w-9 sm:h-9 rounded-lg"
           />

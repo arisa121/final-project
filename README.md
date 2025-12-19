@@ -4,7 +4,7 @@ A full-stack web application that allows citizens to report public issues, admin
 
 🚀 Live Demo
 
-Client: (Add your live frontend URL here)
+Client: https://final-project-d2289.web.app/
 
 Server: (Add your live backend URL here)
 
