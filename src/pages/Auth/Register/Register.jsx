@@ -4,7 +4,6 @@ import useAuth from "../../../hook/useAuth";
 import Swal from "sweetalert2";
 import { useState } from "react";
 import SocialLogin from "../SocialLogin/SocialLogin";
-import axiosSecure from "../../../api/axiosSecure";
 
 const Register = () => {
   const {
@@ -34,19 +33,6 @@ const Register = () => {
         data.password,
         data.firstName,
         data.photo
-      );
-
-      console.log("Registration successful:", result.user);
-      const { email, uid, displayName, photoURL } = result.user;
-      // Backend sync
-      await axiosSecure.post(
-        "https://final-project-server-side-pi.vercel.app/api/auth/register-or-login",
-        {
-          email,
-          uid,
-          name: displayName,
-          photo: photoURL,
-        }
       );
       Swal.fire({
         title: "Success!",

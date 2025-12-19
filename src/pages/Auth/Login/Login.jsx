@@ -4,7 +4,6 @@ import { useState } from "react";
 import SocialLogin from "../SocialLogin/SocialLogin";
 import Swal from "sweetalert2";
 import useAuth from "../../../hook/useAuth";
-import axiosSecure from "../../../api/axiosSecure";
 const Login = () => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -22,20 +21,6 @@ const Login = () => {
     try {
       // Login with Firebase (works for all roles)
       const result = await signInUser(data.email, data.password);
-
-      console.log("Login successful:", result);
-      const { email, uid, displayName, photoURL } = result.user;
-      // Backend sync
-      await axiosSecure.post(
-        "https://final-project-server-side-pi.vercel.app/api/auth/register-or-login",
-        {
-          email,
-          uid,
-          name: displayName,
-          photo: photoURL,
-        }
-      );
-      // Success message
       Swal.fire({
         title: "Success!",
         text: "You have logged in successfully.",
