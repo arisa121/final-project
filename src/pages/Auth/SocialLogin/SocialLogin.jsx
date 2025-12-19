@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import useAuth from "../../../hook/useAuth";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router";
+import axiosSecure from "../../../api/axiosSecure";
 
 const SocialLogin = () => {
   const { signInGoogle } = useAuth();
@@ -15,6 +16,17 @@ const SocialLogin = () => {
       const result = await signInGoogle();
 
       console.log("Google sign-in successful:", result);
+      const { email, uid, displayName, photoURL } = result.user;
+      // Backend sync
+      await axiosSecure.post(
+        "https://final-project-server-side-pi.vercel.app/api/auth/register-or-login",
+        {
+          email,
+          uid,
+          name: displayName,
+          photo: photoURL,
+        }
+      );
 
       Swal.fire({
         title: "Success!",

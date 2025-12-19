@@ -4,6 +4,7 @@ import useAuth from "../../../hook/useAuth";
 import Swal from "sweetalert2";
 import { useState } from "react";
 import SocialLogin from "../SocialLogin/SocialLogin";
+import axiosSecure from "../../../api/axiosSecure";
 
 const Register = () => {
   const {
@@ -36,7 +37,17 @@ const Register = () => {
       );
 
       console.log("Registration successful:", result.user);
-
+      const { email, uid, displayName, photoURL } = result.user;
+      // Backend sync
+      await axiosSecure.post(
+        "https://final-project-server-side-pi.vercel.app/api/auth/register-or-login",
+        {
+          email,
+          uid,
+          name: displayName,
+          photo: photoURL,
+        }
+      );
       Swal.fire({
         title: "Success!",
         text: "You have registered successfully.",
@@ -46,7 +57,17 @@ const Register = () => {
       });
 
       //  Navigate to dashboard (citizens default to /dashboard)
-      navigate("/dashboard");
+
+      // Navigate based on role
+      const userRole = result.user.role;
+
+      if (userRole === "admin") {
+        navigate("/admin");
+      } else if (userRole === "staff") {
+        navigate("/staff");
+      } else {
+        navigate("/citizen");
+      }
     } catch (error) {
       console.error("Registration error:", error);
 
