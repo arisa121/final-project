@@ -120,7 +120,7 @@ console.log("Sending data:", newIssue);
               disabled={user?.isBlocked}
             >
               <option value="">Select Category</option>
-              <option value="Road">Roads</option>
+              <option value="Roads">Roads</option>
               <option value="Garbage">Garbage</option>
               <option value="Water">Water</option>
               <option value="Streetlights">Streetlights</option>
