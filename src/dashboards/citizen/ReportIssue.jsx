@@ -40,9 +40,9 @@ const ReportIssue = () => {
       description: form.description.value,
       category: form.category.value,
       image: form.image.value,
-      address: form.address.value,
+      location: form.address.value,
     };
-
+console.log("Sending data:", newIssue);
     mutation.mutate(newIssue);
   };
 
@@ -120,7 +120,7 @@ const ReportIssue = () => {
               disabled={user?.isBlocked}
             >
               <option value="">Select Category</option>
-              <option value="Road">Road</option>
+              <option value="Road">Roads</option>
               <option value="Garbage">Garbage</option>
               <option value="Water">Water</option>
               <option value="Streetlights">Streetlights</option>
