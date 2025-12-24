@@ -127,6 +127,7 @@ console.log("Sending data:", newIssue);
               <option value="Electricity">Electricity</option>
               <option value="Traffic">Traffic</option>
               <option value="Safety">Safety</option>
+              <option value="Environment">Environment</option>
               <option value="Health">Health</option>
               <option value="Public Services">Public Services</option>
               <option value="Others">Others</option>
